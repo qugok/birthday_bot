@@ -9,13 +9,13 @@ import random
 import argparse
 from datetime import datetime, timezone, timedelta
 
-parser = argparse.ArgumentParser(prog='Media Server')
+parser = argparse.ArgumentParser(prog='tanya_birthday')
 parser.add_argument('-l', '--log-path', default=None)
 args = parser.parse_args()
 
 logging.basicConfig(filename=args.log_path, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', force=True)
 
-logger = logging.getLogger("engine")
+logger = logging.getLogger("tanya_birthday")
 logger.setLevel(logging.DEBUG)
 
 MOSCOW_TIMEZONE = timezone(timedelta(hours=3))
@@ -49,10 +49,10 @@ class SentensesManager:
     def get_sentence_for_client(self, chat_id):
         if chat_id not in self.sent_sentences:
             self.sent_sentences[chat_id] = list()
-        to_choose = [s for s in self.all_sentences if s["index"] not in self.sent_sentences[chat_id]]
         date = get_date()
+        to_choose = [item for item in self.all_sentences if item["index"] not in self.sent_sentences[chat_id] and ("date" not in item or item["date"] <= date)]
         today_sentences=[item for item in to_choose if "date" in item and item["date"] == date]
-        if len(today_sentences) !=0 :
+        if len(today_sentences) != 0:
             return random.choice(today_sentences)
 
         if len(to_choose) == 0:

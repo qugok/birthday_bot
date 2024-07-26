@@ -14,7 +14,8 @@
     {
         "index": 2,
         "text": "Предложение 3",
-        "photo": "photos/Aleks.jpg"
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-25"
     },
     {
         "index": 3,
@@ -29,12 +30,14 @@
     {
         "index": 5,
         "text": "Предложение 6",
-        "photo": "photos/Andrew.jpg"
+        "photo": "photos/Andrew.jpg",
+        "date": "2024-07-25"
     },
     {
         "index": 6,
         "text": "Предложение 7",
-        "photo": "photos/Andrew.jpg"
+        "photo": "photos/Andrew.jpg",
+        "date": "2024-07-27"
     },
     {
         "index": 7,
