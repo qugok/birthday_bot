@@ -57,15 +57,11 @@ class SentensesManager:
         self.sent_sentences[chat_id].append(sentence_index)
         self.__dump__()
 
-
-def wait(t:int):
-    for i in range(t):
-        time.sleep(1)
-        yield i
-
 class ChatsManager:
     time_delta=timedelta(seconds=10)
     last_send_message_time = "last_send_message_time.json"
+    first_message_time=datetime(year=2024, month=7, day=26, hour=16, minute=5).replace(tzinfo=MOSCOW_TIMEZONE)
+    # first_message_time=None
 
     def __init__(self, bot):
         with open(ChatsManager.last_send_message_time, 'r') as f:
@@ -93,16 +89,15 @@ class ChatsManager:
 
     def __run_loop__(self):
         while True:
-            for i in wait(5):
-                if self.has_any_to_send():
-                    break
-            self.send_messages()
+            time.sleep(1)
+            if self.has_any_to_send():
+                self.send_messages()
 
     def add_chat_id(self, chat_id):
         self.lock.acquire()
         chat_id_str = str(chat_id)
         if chat_id_str not in self.last_send_message_time:
-            self.last_send_message_time[chat_id] = MIN_TIME
+            self.last_send_message_time[chat_id] = ChatsManager.first_message_time if ChatsManager.first_message_time is not None else  MIN_TIME
             self.__dump__()
         self.lock.release()
 
@@ -130,7 +125,6 @@ class ChatsManager:
             self.send_message(chat_id)
         self.lock.release()
 
-#TODO  добавить first message time
 
 manager = ChatsManager(bot)
 
