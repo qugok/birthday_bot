@@ -21,6 +21,7 @@ logger.setLevel(logging.DEBUG)
 MOSCOW_TIMEZONE = timezone(timedelta(hours=3))
 TIME_FORMAT="%Y-%m-%dT%H:%M:%S"
 MIN_TIME=(datetime.min + timedelta(days=400000)).replace(tzinfo=timezone.utc).astimezone(MOSCOW_TIMEZONE)
+MAX_TIME=datetime(year=2054, month=7, day=26, hour=16, minute=5).replace(tzinfo=timezone.utc).astimezone(MOSCOW_TIMEZONE)
 
 token_path = "token"
 with open(token_path, 'r') as f:
@@ -28,10 +29,10 @@ with open(token_path, 'r') as f:
 
 bot = telebot.TeleBot(API_TOKEN)
 
-# Список предложений и соответствующих им фотографий
-with open("sentences.json", 'r') as f:
-    sentences_with_photos = json.load(f)
+def get_date():
+    return str(datetime.now(MOSCOW_TIMEZONE).date())
 
+# Список предложений и соответствующих им фотографий
 class SentensesManager:
     sent_sentences = "sent_sentences.json"
     all_sentences = "sentences.json"
@@ -49,6 +50,11 @@ class SentensesManager:
         if chat_id not in self.sent_sentences:
             self.sent_sentences[chat_id] = list()
         to_choose = [s for s in self.all_sentences if s["index"] not in self.sent_sentences[chat_id]]
+        date = get_date()
+        today_sentences=[item for item in to_choose if "date" in item and item["date"] == date]
+        if len(today_sentences) !=0 :
+            return random.choice(today_sentences)
+
         if len(to_choose) == 0:
             return None
         return random.choice(to_choose)
@@ -105,7 +111,7 @@ class ChatsManager:
         item = self.sentenses_manager.get_sentence_for_client(chat_id)
         if item is None:
             logger.info("messages ended for " + str(chat_id))
-            self.last_send_message_time[chat_id] = datetime.max.replace(tzinfo=MOSCOW_TIMEZONE)
+            self.last_send_message_time[chat_id] = MAX_TIME
             self.__dump__()
             return
 

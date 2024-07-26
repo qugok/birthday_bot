@@ -2,12 +2,14 @@
     {
         "index": 0,
         "text": "Предложение 2",
-        "photo": "photos/Aleks.jpg"
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-26"
     },
     {
         "index": 1,
         "text": "Предложение 1",
-        "photo": "photos/Aleks.jpg"
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-26"
     },
     {
         "index": 2,
