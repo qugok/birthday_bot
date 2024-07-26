@@ -32,7 +32,6 @@ bot = telebot.TeleBot(API_TOKEN)
 def get_date():
     return str(datetime.now(MOSCOW_TIMEZONE).date())
 
-# Список предложений и соответствующих им фотографий
 class SentensesManager:
     sent_sentences = "sent_sentences.json"
     all_sentences = "sentences.json"
@@ -64,10 +63,10 @@ class SentensesManager:
         self.__dump__()
 
 class ChatsManager:
-    time_delta=timedelta(seconds=10)
+    time_delta=timedelta(seconds=5)
     last_send_message_time = "last_send_message_time.json"
-    first_message_time=datetime(year=2024, month=7, day=26, hour=16, minute=5).replace(tzinfo=MOSCOW_TIMEZONE)
-    # first_message_time=None
+    # first_message_time=datetime(year=2024, month=7, day=26, hour=16, minute=5).replace(tzinfo=MOSCOW_TIMEZONE)
+    first_message_time=None
 
     def __init__(self, bot):
         with open(ChatsManager.last_send_message_time, 'r') as f:
@@ -115,9 +114,12 @@ class ChatsManager:
             self.__dump__()
             return
 
-        # logger.info("Server started, listening on " + port)
         with open(item["photo"], 'rb') as photo:
-            self.bot.send_photo(chat_id, photo, caption=item["text"])
+            try:
+                self.bot.send_photo(chat_id, photo, caption=item["text"])
+            except Exception as e:
+                logger.error("failed to send " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"] + str(e))
+                return
         logger.info("sending message " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"])
         self.sentenses_manager.send_sentence_for_client(item["index"], chat_id)
         self.last_send_message_time[chat_id] = datetime.now(MOSCOW_TIMEZONE)

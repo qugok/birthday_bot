@@ -1,0 +1,77 @@
+[
+    {
+        "index": 0,
+        "text": "Предложение 2",
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-26"
+    },
+    {
+        "index": 1,
+        "text": "Предложение 1",
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-26"
+    },
+    {
+        "index": 2,
+        "text": "Предложение 3",
+        "photo": "photos/Aleks.jpg",
+        "date": "2024-07-25"
+    },
+    {
+        "index": 3,
+        "text": "Предложение 4",
+        "photo": "photos/Andrew.jpg"
+    },
+    {
+        "index": 4,
+        "text": "Предложение 5",
+        "photo": "photos/Andrew.jpg"
+    },
+    {
+        "index": 5,
+        "text": "Предложение 6",
+        "photo": "photos/Andrew.jpg",
+        "date": "2024-07-25"
+    },
+    {
+        "index": 6,
+        "text": "Предложение 7",
+        "photo": "photos/Andrew.jpg",
+        "date": "2024-07-27"
+    },
+    {
+        "index": 7,
+        "text": "Предложение 8",
+        "photo": "photos/Anya.jpg"
+    },
+    {
+        "index": 8,
+        "text": "Предложение 9",
+        "photo": "photos/Anya.jpg"
+    },
+    {
+        "index": 9,
+        "text": "Предложение 10",
+        "photo": "photos/Anya.jpg"
+    },
+    {
+        "index": 10,
+        "text": "Предложение 11",
+        "photo": "photos/Danya.jpg"
+    },
+    {
+        "index": 11,
+        "text": "Предложение 12",
+        "photo": "photos/Dasha.jpg"
+    },
+    {
+        "index": 12,
+        "text": "Предложение 13",
+        "photo": "photos/Ilya.jpg"
+    },
+    {
+        "index": 13,
+        "text": "Предложение 14",
+        "photo": "photos/Ilya.jpg"
+    }
+]
