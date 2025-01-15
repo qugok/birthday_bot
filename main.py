@@ -5,6 +5,7 @@ import telebot
 import threading
 import time
 import json
+import sys
 import random
 import argparse
 from datetime import datetime, timezone, timedelta
@@ -27,10 +28,16 @@ token_path = "token"
 with open(token_path, 'r') as f:
     API_TOKEN = f.readline()[:-1]
 
-bot = telebot.TeleBot(API_TOKEN)
+class MyExceptionHandler(telebot.ExceptionHandler):
+    def handle(exception):
+        print(datetime.now(), repr(exception), file=sys.stderr, flush=True)
+        return True
+
+bot = telebot.TeleBot(API_TOKEN, exception_handler=MyExceptionHandler)
 
 def get_date():
     return str(datetime.now(MOSCOW_TIMEZONE).date())
+
 
 class SentensesManager:
     sent_sentences = "sent_sentences.json"
@@ -63,7 +70,8 @@ class SentensesManager:
         self.__dump__()
 
 class ChatsManager:
-    time_delta=timedelta(seconds=5)
+    # time_delta=timedelta(seconds=5)
+    time_delta=timedelta(days=1)
     last_send_message_time = "last_send_message_time.json"
     # first_message_time=datetime(year=2024, month=7, day=26, hour=16, minute=5).replace(tzinfo=MOSCOW_TIMEZONE)
     first_message_time=None
@@ -98,12 +106,16 @@ class ChatsManager:
             if self.has_any_to_send():
                 self.send_messages()
 
-    def add_chat_id(self, chat_id):
+    def add_chat_id(self, chat_id, from_user):
         self.lock.acquire()
         chat_id_str = str(chat_id)
         if chat_id_str not in self.last_send_message_time:
-            self.last_send_message_time[chat_id] = ChatsManager.first_message_time if ChatsManager.first_message_time is not None else  MIN_TIME
+            logger.info(f"adding user {from_user.id} {from_user.first_name} {from_user.last_name} {from_user.username}")
+            self.last_send_message_time[chat_id_str] = ChatsManager.first_message_time if ChatsManager.first_message_time is not None else  MIN_TIME
             self.__dump__()
+        else:
+            logger.info(f"user pressed start {from_user.id} {from_user.first_name} {from_user.last_name} {from_user.username}")
+
         self.lock.release()
 
     def send_message(self, chat_id):
@@ -140,9 +152,8 @@ manager.start()
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-
     bot.reply_to(message, "Привет, Таня")
-    manager.add_chat_id(message.chat.id)
+    manager.add_chat_id(message.chat.id, message.from_user)
 
 
 # Запуск бота
