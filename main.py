@@ -133,21 +133,21 @@ class ChatsManager:
             self.__dump__()
             return
 
-        with open(item["photo"], 'rb') as photo:
-            try:
+        try:
+            with open(item["photo"], 'rb') as photo:
                 self.bot.send_photo(chat_id, photo, caption=item["text"], timeout=TIMEOUT)
-            except telebot.apihelper.ApiTelegramException as e:
-                if e.error_code == 403 and "bot was blocked by the user" in e.description:
-                    logger.error("bot was blocked by " + str(chat_id) + " \t" + str(self.chat_meta[str(chat_id)])+ " \terror: " + str(e))
-                    self.last_send_message_time[chat_id] = MAX_TIME
-                    self.chat_meta[str(chat_id)]["blocked"] = True
-                    self.__dump__()
-                else:
-                    logger.error("telebot err: failed to send " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"].replace('\n', '\\n') + " \terror: " + str(e) + repr(e))
-                return
-            except Exception as e:
-                logger.error("failed to send " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"].replace('\n', '\\n') + " \terror: " + str(e))
-                return
+        except telebot.apihelper.ApiTelegramException as e:
+            if e.error_code == 403 and "bot was blocked by the user" in e.description:
+                logger.error("bot was blocked by " + str(chat_id) + " \t" + str(self.chat_meta[str(chat_id)])+ " \terror: " + str(e))
+                self.last_send_message_time[chat_id] = MAX_TIME
+                self.chat_meta[str(chat_id)]["blocked"] = True
+                self.__dump__()
+            else:
+                logger.error("telebot err: failed to send " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"].replace('\n', '\\n') + " \terror: " + str(e) + repr(e))
+            return
+        except Exception as e:
+            logger.error("failed to send " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"].replace('\n', '\\n') + " \terror: " + str(e))
+            return
         logger.info("sending message " + str(chat_id) + " " + str(item["index"]) + " " +  item["text"].replace('\n', '\\n'))
         self.sentenses_manager.send_sentence_for_client(item["index"], chat_id)
         self.last_send_message_time[chat_id] = datetime.now(MOSCOW_TIMEZONE)
