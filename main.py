@@ -91,7 +91,7 @@ class ChatsManager:
         with open(ChatsManager.last_send_message_time, 'w') as f:
             json.dump({id:t.strftime(TIME_FORMAT) for id, t in self.last_send_message_time.items()}, f)
         with open(ChatsManager.chat_meta, 'w') as f:
-            json.dump(self.chat_meta, f)
+            json.dump(self.chat_meta, f, indent=0)
 
     def has_any_to_send(self):
         self.lock.acquire()
